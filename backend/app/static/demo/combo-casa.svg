@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="650" viewBox="0 0 900 650">
+  <rect width="900" height="650" fill="#14532d"/>
+  <circle cx="690" cy="165" r="210" fill="#facc15" opacity="0.28"/>
+  <g transform="translate(95 160)">
+    <rect x="0" y="180" width="190" height="230" rx="28" fill="#b91c1c"/>
+    <path d="M30 140h130l-20 270H50z" fill="#dc2626"/>
+    <path d="M45 85h25l-8 225H37zM85 65h27l-11 245H75zM128 92h26l-15 218h-25z" fill="#fbbf24"/>
+  </g>
+  <g transform="translate(315 135)">
+    <ellipse cx="215" cy="360" rx="250" ry="42" fill="#000" opacity="0.3"/>
+    <path d="M30 205c16-86 92-140 185-140s169 54 185 140H30z" fill="#f59e0b"/>
+    <rect x="0" y="205" width="430" height="78" rx="39" fill="#7f1d1d"/>
+    <path d="M45 290h340c-10 67-82 112-170 112S55 357 45 290z" fill="#92400e"/>
+    <path d="M70 198h290" stroke="#fff7ed" stroke-width="20" stroke-linecap="round" stroke-dasharray="1 42"/>
+  </g>
+  <g transform="translate(700 250)">
+    <rect x="0" y="0" width="95" height="220" rx="22" fill="#e0f2fe"/>
+    <rect x="8" y="25" width="79" height="160" rx="14" fill="#ef4444"/>
+    <path d="M20-58h30l25 75H45z" fill="#e5e7eb"/>
+  </g>
+  <text x="62" y="78" font-family="Arial, sans-serif" font-size="54" font-weight="900" fill="#fff7ed">Combo da Casa</text>
+  <text x="62" y="125" font-family="Arial, sans-serif" font-size="24" fill="#bbf7d0">burger, batata frita e refrigerante</text>
+</svg>

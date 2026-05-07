@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#111827"/>
+  <circle cx="256" cy="256" r="176" fill="#f4c542"/>
+  <path d="M132 245c9-67 62-111 124-111s115 44 124 111H132z" fill="#f59e0b"/>
+  <path d="M123 270h266c12 0 22 10 22 22s-10 22-22 22H123c-12 0-22-10-22-22s10-22 22-22z" fill="#7f1d1d"/>
+  <path d="M144 330h224c0 34-50 62-112 62s-112-28-112-62z" fill="#92400e"/>
+  <path d="M154 238h204" stroke="#fff7ed" stroke-width="16" stroke-linecap="round" stroke-dasharray="1 32"/>
+  <text x="256" y="102" text-anchor="middle" font-family="Arial, sans-serif" font-size="44" font-weight="900" fill="#fff7ed">BURGER</text>
+  <text x="256" y="462" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="900" fill="#111827">DEMO</text>
+</svg>

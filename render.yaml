@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: delivery-saas-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile.api
+    healthCheckPath: /health
+    envVars:
+      - key: APP_NAME
+        value: Delivery SaaS FastAPI
+      - key: API_PREFIX
+        value: /api
+      - key: DATABASE_URL
+        sync: false
+      - key: CORS_ORIGINS
+        value: '["https://seu-frontend.vercel.app"]'
+      - key: PUBLIC_BASE_URL
+        value: https://sua-api.onrender.com
+      - key: LOCAL_UPLOAD_DIR
+        value: uploads
+      - key: ADMIN_TOKEN_SECRET
+        sync: false
+      - key: PAYMENT_PROVIDER
+        value: mercado_pago
+      - key: MERCADO_PAGO_ACCESS_TOKEN
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_STORAGE_BUCKET
+        value: product-images

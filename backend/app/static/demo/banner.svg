@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="700" viewBox="0 0 1600 700">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1">
+      <stop offset="0" stop-color="#111827"/>
+      <stop offset="0.55" stop-color="#3b1111"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="72%" cy="45%" r="45%">
+      <stop offset="0" stop-color="#fcd34d" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#fcd34d" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="700" fill="url(#bg)"/>
+  <rect width="1600" height="700" fill="url(#glow)"/>
+  <g transform="translate(930 120)">
+    <ellipse cx="245" cy="405" rx="270" ry="42" fill="#000" opacity="0.25"/>
+    <path d="M45 250c12-112 98-185 200-185s188 73 200 185H45z" fill="#f59e0b"/>
+    <path d="M62 250h366c18 0 32 14 32 32s-14 32-32 32H62c-18 0-32-14-32-32s14-32 32-32z" fill="#7f1d1d"/>
+    <path d="M84 325h322c-4 72-74 122-161 122S88 397 84 325z" fill="#92400e"/>
+    <path d="M95 239h300" stroke="#fff7ed" stroke-width="22" stroke-linecap="round" stroke-dasharray="1 43"/>
+    <path d="M95 317c50 18 98 18 145 0 50-19 100-18 150 0" stroke="#22c55e" stroke-width="18" stroke-linecap="round" fill="none"/>
+  </g>
+  <g transform="translate(110 135)">
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="70" font-weight="900" fill="#fff7ed">Burger Demo</text>
+    <text x="0" y="86" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#fcd34d">hamburguer artesanal direto da chapa</text>
+    <text x="0" y="154" font-family="Arial, sans-serif" font-size="28" fill="#fff7ed">Pedidos online, preparo acompanhado e entrega rastreada.</text>
+    <rect x="0" y="215" width="295" height="64" rx="14" fill="#f4c542"/>
+    <text x="148" y="257" text-anchor="middle" font-family="Arial, sans-serif" font-size="25" font-weight="900" fill="#111827">ABERTO PARA PEDIDOS</text>
+  </g>
+</svg>

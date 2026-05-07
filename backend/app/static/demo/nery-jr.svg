@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="650" viewBox="0 0 900 650">
+  <rect width="900" height="650" fill="#21130f"/>
+  <circle cx="700" cy="130" r="220" fill="#f59e0b" opacity="0.35"/>
+  <ellipse cx="450" cy="525" rx="310" ry="52" fill="#000" opacity="0.35"/>
+  <path d="M185 285c17-118 126-190 265-190s248 72 265 190H185z" fill="#f59e0b"/>
+  <path d="M200 283h500c30 0 55 25 55 55s-25 55-55 55H200c-30 0-55-25-55-55s25-55 55-55z" fill="#7f1d1d"/>
+  <path d="M220 398h460c-8 87-110 147-230 147s-222-60-230-147z" fill="#92400e"/>
+  <path d="M240 274h420" stroke="#fff7ed" stroke-width="28" stroke-linecap="round" stroke-dasharray="1 56"/>
+  <path d="M235 391c74 26 141 26 205 0 73-29 148-28 225 0" stroke="#22c55e" stroke-width="24" stroke-linecap="round" fill="none"/>
+  <text x="62" y="78" font-family="Arial, sans-serif" font-size="54" font-weight="900" fill="#fff7ed">Nery Jr</text>
+  <text x="62" y="125" font-family="Arial, sans-serif" font-size="24" fill="#fcd34d">bacon crocante e molho da casa</text>
+</svg>
