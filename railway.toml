@@ -6,3 +6,17 @@ dockerfilePath = "Dockerfile.api"
 healthcheckPath = "/health"
 healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
+
+# Configure these in Railway Variables:
+# DATABASE_URL
+# CORS_ORIGINS
+# PUBLIC_BASE_URL
+# ADMIN_TOKEN_SECRET
+# ADMIN_AUTH_MODE
+# JWT_SECRET
+# JWT_ISSUER
+# JWT_AUDIENCE
+# JWT_TENANT_CLAIM
+# MERCADO_PAGO_ACCESS_TOKEN
+# SUPABASE_URL
+# SUPABASE_SERVICE_ROLE_KEY

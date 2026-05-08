@@ -31,6 +31,11 @@ CORS_ORIGINS='["https://app.seudominio.com"]'
 PUBLIC_BASE_URL="https://api.seudominio.com"
 LOCAL_UPLOAD_DIR="uploads"
 ADMIN_TOKEN_SECRET="troque-por-um-segredo-forte"
+ADMIN_AUTH_MODE="jwt"
+JWT_SECRET="supabase-jwt-secret-ou-chave-hs256"
+JWT_ISSUER="https://seu-projeto.supabase.co/auth/v1"
+JWT_AUDIENCE="authenticated"
+JWT_TENANT_CLAIM="app_metadata.tenant_id"
 PAYMENT_PROVIDER="mercado_pago"
 MERCADO_PAGO_ACCESS_TOKEN="APP_USR-..."
 SUPABASE_URL="https://seu-projeto.supabase.co"
@@ -252,8 +257,8 @@ cd frontend && npm run build
 
 ## Limites Do Estado Atual
 
-- Autenticacao administrativa ainda e token local simples.
-- Para producao robusta, substituir por Supabase Auth/JWT.
+- Autenticacao administrativa ja aceita JWT HS256 quando `ADMIN_AUTH_MODE=jwt`.
+- Ainda falta conectar a tela de login ao Supabase Auth para emitir o JWT real do painel.
 - Gateway PIX/cartao fica simulado por padrao. A base para Mercado Pago ja existe, mas requer `MERCADO_PAGO_ACCESS_TOKEN` real e validacao final de webhooks.
 - Geocodificacao usa Nominatim/OpenStreetMap no frontend.
 

@@ -93,7 +93,10 @@ async function request<T>(path: string, tenantId: string | null, init?: RequestI
   headers.set("Content-Type", "application/json");
   if (tenantId) headers.set("X-Tenant-Id", tenantId);
   const adminToken = localStorage.getItem("adminToken");
-  if (adminToken) headers.set("X-Admin-Token", adminToken);
+  if (adminToken) {
+    headers.set("X-Admin-Token", adminToken);
+    if (isJwt(adminToken)) headers.set("Authorization", `Bearer ${adminToken}`);
+  }
 
   const response = await fetch(`${API_URL}${path}`, { ...init, headers });
   if (!response.ok) {
@@ -113,7 +116,10 @@ async function uploadRequest<T>(path: string, tenantId: string, file: File): Pro
   const headers = new Headers();
   headers.set("X-Tenant-Id", tenantId);
   const adminToken = localStorage.getItem("adminToken");
-  if (adminToken) headers.set("X-Admin-Token", adminToken);
+  if (adminToken) {
+    headers.set("X-Admin-Token", adminToken);
+    if (isJwt(adminToken)) headers.set("Authorization", `Bearer ${adminToken}`);
+  }
 
   const response = await fetch(`${API_URL}${path}`, { method: "POST", headers, body });
   if (!response.ok) {
@@ -207,3 +213,7 @@ export const api = {
       },
     ),
 };
+
+function isJwt(token: string): boolean {
+  return token.split(".").length === 3;
+}

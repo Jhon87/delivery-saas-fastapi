@@ -19,6 +19,16 @@ services:
         value: uploads
       - key: ADMIN_TOKEN_SECRET
         sync: false
+      - key: ADMIN_AUTH_MODE
+        value: jwt
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_ISSUER
+        sync: false
+      - key: JWT_AUDIENCE
+        value: authenticated
+      - key: JWT_TENANT_CLAIM
+        value: app_metadata.tenant_id
       - key: PAYMENT_PROVIDER
         value: mercado_pago
       - key: MERCADO_PAGO_ACCESS_TOKEN

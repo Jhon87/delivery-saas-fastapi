@@ -1,4 +1,5 @@
 from functools import lru_cache
+from typing import Literal
 
 from pydantic import AnyHttpUrl, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -12,6 +13,11 @@ class Settings(BaseSettings):
     public_base_url: str = "http://localhost:8000"
     local_upload_dir: str = "uploads"
     admin_token_secret: str = "dev-change-me"
+    admin_auth_mode: Literal["local", "jwt", "hybrid"] = "local"
+    jwt_secret: str | None = None
+    jwt_issuer: str | None = None
+    jwt_audience: str | None = None
+    jwt_tenant_claim: str = "app_metadata.tenant_id"
     payment_provider: str = "simulated"
     mercado_pago_access_token: str | None = None
 
@@ -21,7 +27,15 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
-    @field_validator("mercado_pago_access_token", "supabase_url", "supabase_service_role_key", mode="before")
+    @field_validator(
+        "mercado_pago_access_token",
+        "jwt_secret",
+        "jwt_issuer",
+        "jwt_audience",
+        "supabase_url",
+        "supabase_service_role_key",
+        mode="before",
+    )
     @classmethod
     def empty_string_as_none(cls, value: str | None) -> str | None:
         if value == "":

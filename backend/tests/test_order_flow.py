@@ -11,6 +11,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from fastapi.testclient import TestClient  # noqa: E402
 
+from app.core.config import get_settings  # noqa: E402
+from app.core.security import create_hs256_jwt  # noqa: E402
 from app.main import app  # noqa: E402
 
 
@@ -211,3 +213,28 @@ def test_tenant_isolation_and_admin_token_scope():
     assert tenant_b_orders.status_code == 200
     assert len(tenant_a_orders.json()) == 1
     assert tenant_b_orders.json() == []
+
+
+def test_admin_jwt_authorizes_tenant_when_enabled(monkeypatch):
+    tenant_id, _, _, _ = create_store_with_product("teste-jwt-admin")
+    jwt_secret = "jwt-test-secret"
+    token = create_hs256_jwt({"app_metadata": {"tenant_id": tenant_id}}, jwt_secret)
+
+    monkeypatch.setenv("ADMIN_AUTH_MODE", "jwt")
+    monkeypatch.setenv("JWT_SECRET", jwt_secret)
+    get_settings.cache_clear()
+    try:
+        settings_response = client.get(
+            "/api/tenant/settings",
+            headers={"X-Tenant-Id": tenant_id, "Authorization": f"Bearer {token}"},
+        )
+        assert settings_response.status_code == 200
+        assert settings_response.json()["id"] == tenant_id
+
+        local_token_response = client.get(
+            "/api/tenant/settings",
+            headers={"X-Tenant-Id": tenant_id, "X-Admin-Token": token},
+        )
+        assert local_token_response.status_code == 401
+    finally:
+        get_settings.cache_clear()

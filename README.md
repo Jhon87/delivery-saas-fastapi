@@ -125,6 +125,7 @@ npm run dev
 - Multi-tenant por `tenant_id`.
 - Criacao de loja com senha administrativa.
 - Login administrativo com token simples local.
+- Autenticacao administrativa por JWT HS256 configuravel para producao.
 - CRUD de categorias.
 - CRUD de produtos.
 - Upload local de imagens e fallback para Supabase Storage quando configurado.
@@ -159,12 +160,12 @@ Pronto para demonstracao local:
 
 Ainda pendente para producao real:
 
-- Substituir login local por Supabase Auth/JWT.
+- Conectar o login do painel ao Supabase Auth e emitir JWT com `app_metadata.tenant_id`.
 - Usar Supabase/Postgres em vez de SQLite local.
 - Configurar dominio, HTTPS e CORS publico.
 - Configurar storage Supabase para imagens reais em producao.
 - Configurar e validar gateway real de PIX/cartao.
-- Definir `ADMIN_TOKEN_SECRET` forte.
+- Definir `ADMIN_TOKEN_SECRET` forte se `ADMIN_AUTH_MODE=local` ou `hybrid`.
 
 ## Testes
 
@@ -207,11 +208,32 @@ SUPABASE_STORAGE_BUCKET="product-images"
 
 Sem essas variaveis, uploads ficam locais em `backend/uploads`.
 
+## Autenticacao Administrativa
+
+O modo local continua ativo por padrao para demo:
+
+```bash
+ADMIN_AUTH_MODE="local"
+ADMIN_TOKEN_SECRET="dev-change-me"
+```
+
+Para producao com JWT HS256:
+
+```bash
+ADMIN_AUTH_MODE="jwt"
+JWT_SECRET="supabase-jwt-secret-ou-chave-hs256"
+JWT_ISSUER="https://seu-projeto.supabase.co/auth/v1"
+JWT_AUDIENCE="authenticated"
+JWT_TENANT_CLAIM="app_metadata.tenant_id"
+```
+
+Nesse modo, as rotas administrativas aceitam `Authorization: Bearer <jwt>` e validam se o claim configurado em `JWT_TENANT_CLAIM` corresponde ao header `X-Tenant-Id`.
+
 ## Producao
 
 Antes de colocar em producao:
 
-- Trocar o token administrativo local por Supabase Auth/JWT.
+- Conectar o frontend ao Supabase Auth e salvar o JWT da sessao administrativa.
 - Definir `ADMIN_TOKEN_SECRET` forte.
 - Usar Postgres/Supabase em vez de SQLite.
 - Configurar dominio, HTTPS e CORS.
