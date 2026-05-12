@@ -238,3 +238,17 @@ def test_admin_jwt_authorizes_tenant_when_enabled(monkeypatch):
         assert local_token_response.status_code == 401
     finally:
         get_settings.cache_clear()
+
+
+def test_public_tenant_creation_can_be_disabled(monkeypatch):
+    monkeypatch.setenv("ALLOW_PUBLIC_TENANT_CREATION", "false")
+    get_settings.cache_clear()
+    try:
+        response = client.post(
+            "/api/tenants",
+            json={"name": "Bloqueada Burger", "slug": "bloqueada-burger", "admin_password": "admin123"},
+        )
+        assert response.status_code == 403
+        assert response.json()["detail"] == "Criacao publica de lojas desabilitada."
+    finally:
+        get_settings.cache_clear()

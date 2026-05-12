@@ -160,12 +160,13 @@ Pronto para demonstracao local:
 
 Ainda pendente para producao real:
 
-- Conectar o login do painel ao Supabase Auth e emitir JWT com `app_metadata.tenant_id`.
+- Criar usuarios no Supabase Auth com `app_metadata.tenant_id` apontando para a loja.
 - Usar Supabase/Postgres em vez de SQLite local.
 - Configurar dominio, HTTPS e CORS publico.
 - Configurar storage Supabase para imagens reais em producao.
 - Configurar e validar gateway real de PIX/cartao.
 - Definir `ADMIN_TOKEN_SECRET` forte se `ADMIN_AUTH_MODE=local` ou `hybrid`.
+- Manter `ALLOW_PUBLIC_TENANT_CREATION=false` apos criar a loja de producao.
 
 ## Testes
 
@@ -186,6 +187,7 @@ Validacoes manuais uteis:
 ```bash
 python3 -m compileall backend/app
 cd frontend && npm run build
+make production-env-check
 ```
 
 ## Supabase
@@ -229,11 +231,30 @@ JWT_TENANT_CLAIM="app_metadata.tenant_id"
 
 Nesse modo, as rotas administrativas aceitam `Authorization: Bearer <jwt>` e validam se o claim configurado em `JWT_TENANT_CLAIM` corresponde ao header `X-Tenant-Id`.
 
+Para criar a loja sem expor cadastro publico em producao, use:
+
+```bash
+cd backend
+DATABASE_URL="postgresql+psycopg://..." .venv/bin/python scripts/create_tenant.py \
+  --name "Minha Hamburgueria" \
+  --slug "minha-hamburgueria" \
+  --admin-password "uma-senha-forte"
+```
+
+Para o frontend usar Supabase Auth no login do painel, configure:
+
+```bash
+VITE_SUPABASE_URL="https://seu-projeto.supabase.co"
+VITE_SUPABASE_ANON_KEY="sua-chave-anon-publica"
+```
+
+Quando essas variaveis existem, a tela de login pede e-mail e senha, chama Supabase Auth e salva o JWT retornado como sessao administrativa. Sem essas variaveis, o painel continua usando o login local por slug e senha.
+
 ## Producao
 
 Antes de colocar em producao:
 
-- Conectar o frontend ao Supabase Auth e salvar o JWT da sessao administrativa.
+- Configurar usuarios do painel no Supabase Auth com `app_metadata.tenant_id`.
 - Definir `ADMIN_TOKEN_SECRET` forte.
 - Usar Postgres/Supabase em vez de SQLite.
 - Configurar dominio, HTTPS e CORS.

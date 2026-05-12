@@ -77,6 +77,12 @@ export type AdminAuth = {
 };
 
 const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000/api";
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL ?? "";
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY ?? "";
+
+export function isSupabaseAuthEnabled(): boolean {
+  return Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
+}
 
 export function resolveAssetUrl(assetUrl?: string | null): string {
   if (!assetUrl) return "";
@@ -213,6 +219,26 @@ export const api = {
       },
     ),
 };
+
+export async function supabasePasswordLogin(email: string, password: string): Promise<string> {
+  if (!isSupabaseAuthEnabled()) throw new Error("Supabase Auth nao configurado.");
+  if (!email.trim()) throw new Error("Informe o e-mail do administrador.");
+  const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      apikey: SUPABASE_ANON_KEY,
+      Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+    },
+    body: JSON.stringify({ email, password }),
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(data.error_description || data.msg || data.error || "Credenciais invalidas.");
+  }
+  if (!data.access_token) throw new Error("Supabase nao retornou token de acesso.");
+  return data.access_token;
+}
 
 function isJwt(token: string): boolean {
   return token.split(".").length === 3;

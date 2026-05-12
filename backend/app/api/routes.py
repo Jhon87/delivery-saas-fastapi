@@ -36,6 +36,8 @@ tracking_connections: dict[str, list[WebSocket]] = {}
 
 @router.post("/tenants", response_model=TenantRead, status_code=status.HTTP_201_CREATED)
 def create_tenant(payload: TenantCreate, db: DbSession) -> Tenant:
+    if not get_settings().allow_public_tenant_creation:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Criacao publica de lojas desabilitada.")
     data = payload.model_dump()
     admin_password = data.pop("admin_password")
     tenant = Tenant(**data, admin_password_hash=hash_password(admin_password))

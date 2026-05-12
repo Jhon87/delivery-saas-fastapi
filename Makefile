@@ -1,4 +1,4 @@
-.PHONY: install-backend seed-demo reset-demo-orders test-backend check-backend build-frontend docker-up docker-down presentation-up presentation-down validate deploy-check
+.PHONY: install-backend seed-demo reset-demo-orders test-backend check-backend build-frontend docker-up docker-down presentation-up presentation-down validate production-env-check deploy-check
 
 install-backend:
 	backend/.venv/bin/pip install -r backend/requirements.txt
@@ -31,6 +31,9 @@ presentation-down:
 	docker compose -f docker-compose.prod.yml down
 
 validate: check-backend test-backend build-frontend
+
+production-env-check:
+	python3 backend/scripts/check_production_env.py
 
 deploy-check: validate
 	docker build -f Dockerfile.api -t delivery-saas-api-deploy-check .

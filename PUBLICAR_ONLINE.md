@@ -14,6 +14,21 @@ O projeto ja esta preparado para publicar:
 
 ## Antes De Publicar
 
+Crie os arquivos locais de variaveis reais:
+
+```bash
+cp backend/.env.production.example backend/.env.production
+cp frontend/.env.example frontend/.env.production
+```
+
+Preencha os dois arquivos com as URLs e chaves reais. Eles ficam fora do git.
+
+Depois valide:
+
+```bash
+make production-env-check
+```
+
 Rode:
 
 ```bash
@@ -65,11 +80,12 @@ DATABASE_URL="postgresql+psycopg://..."
 CORS_ORIGINS='["https://sua-loja.netlify.app"]'
 PUBLIC_BASE_URL="https://sua-api.up.railway.app"
 LOCAL_UPLOAD_DIR="uploads"
+ALLOW_PUBLIC_TENANT_CREATION="false"
 ADMIN_TOKEN_SECRET="gere-um-segredo-forte"
-ADMIN_AUTH_MODE="local"
-JWT_SECRET=""
-JWT_ISSUER=""
-JWT_AUDIENCE=""
+ADMIN_AUTH_MODE="jwt"
+JWT_SECRET="supabase-jwt-secret-ou-chave-hs256"
+JWT_ISSUER="https://seu-projeto.supabase.co/auth/v1"
+JWT_AUDIENCE="authenticated"
 JWT_TENANT_CLAIM="app_metadata.tenant_id"
 PAYMENT_PROVIDER="simulated"
 MERCADO_PAGO_ACCESS_TOKEN=""
@@ -97,6 +113,8 @@ https://sua-api.up.railway.app/docs
 ```env
 VITE_API_URL="https://sua-api.up.railway.app/api"
 VITE_WS_URL="wss://sua-api.up.railway.app/api"
+VITE_SUPABASE_URL="https://seu-projeto.supabase.co"
+VITE_SUPABASE_ANON_KEY="sua-chave-anon-publica"
 ```
 
 4. Publique.
@@ -109,10 +127,24 @@ CORS_ORIGINS='["https://sua-loja.netlify.app"]'
 
 ## 5. Criar Dados Da Loja Online
 
+Com `ALLOW_PUBLIC_TENANT_CREATION="false"`, crie a loja pelo terminal apontando para o banco de producao:
+
+```bash
+cd backend
+DATABASE_URL="postgresql+psycopg://..." .venv/bin/python scripts/create_tenant.py \
+  --name "Minha Hamburgueria" \
+  --slug "minha-hamburgueria" \
+  --admin-password "uma-senha-forte" \
+  --phone "11999999999" \
+  --address "Rua Exemplo, 123"
+```
+
+Guarde o `TENANT_ID` exibido. Se usar Supabase Auth, crie o usuario administrador no Supabase com `app_metadata.tenant_id` igual a esse valor.
+
 Depois de backend e frontend publicados:
 
 1. Abra o painel online.
-2. Crie a loja.
+2. Entre com o usuario administrador.
 3. Cadastre categorias.
 4. Cadastre produtos.
 5. Envie imagens.

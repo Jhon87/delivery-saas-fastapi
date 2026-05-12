@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     cors_origins: list[str] = ["http://localhost:5173", "http://127.0.0.1:5173"]
     public_base_url: str = "http://localhost:8000"
     local_upload_dir: str = "uploads"
+    allow_public_tenant_creation: bool = True
     admin_token_secret: str = "dev-change-me"
     admin_auth_mode: Literal["local", "jwt", "hybrid"] = "local"
     jwt_secret: str | None = None

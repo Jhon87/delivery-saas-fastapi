@@ -1,4 +1,6 @@
 .env
+backend/.env.production
+frontend/.env.production
 *.db
 .pytest_cache/
 __pycache__/

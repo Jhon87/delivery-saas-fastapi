@@ -30,6 +30,7 @@ DATABASE_URL="postgresql+psycopg://usuario:senha@host:5432/postgres"
 CORS_ORIGINS='["https://app.seudominio.com"]'
 PUBLIC_BASE_URL="https://api.seudominio.com"
 LOCAL_UPLOAD_DIR="uploads"
+ALLOW_PUBLIC_TENANT_CREATION="false"
 ADMIN_TOKEN_SECRET="troque-por-um-segredo-forte"
 ADMIN_AUTH_MODE="jwt"
 JWT_SECRET="supabase-jwt-secret-ou-chave-hs256"
@@ -240,7 +241,16 @@ VITE_WS_URL="wss://api.seudominio.com/api"
 
 ## Checklist Antes De Producao
 
+- Copiar e preencher os envs locais:
+
+```bash
+cp backend/.env.production.example backend/.env.production
+cp frontend/.env.example frontend/.env.production
+make production-env-check
+```
+
 - Trocar `ADMIN_TOKEN_SECRET`.
+- Manter `ALLOW_PUBLIC_TENANT_CREATION=false` depois de criar a loja.
 - Usar Supabase/Postgres em `DATABASE_URL`.
 - Executar `backend/supabase/schema.sql`.
 - Configurar Supabase Storage.
@@ -248,6 +258,7 @@ VITE_WS_URL="wss://api.seudominio.com/api"
 - Configurar `CORS_ORIGINS` com o dominio real.
 - Configurar HTTPS.
 - Configurar `VITE_API_URL` e `VITE_WS_URL`.
+- Configurar `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` se o painel usar Supabase Auth.
 - Rodar testes:
 
 ```bash
@@ -258,7 +269,8 @@ cd frontend && npm run build
 ## Limites Do Estado Atual
 
 - Autenticacao administrativa ja aceita JWT HS256 quando `ADMIN_AUTH_MODE=jwt`.
-- Ainda falta conectar a tela de login ao Supabase Auth para emitir o JWT real do painel.
+- A tela de login ja usa Supabase Auth quando `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` estao configurados; ainda e necessario criar os usuarios no Supabase com `app_metadata.tenant_id`.
+- Criacao publica de lojas pode ser bloqueada com `ALLOW_PUBLIC_TENANT_CREATION=false`; use `backend/scripts/create_tenant.py` para bootstrap no banco de producao.
 - Gateway PIX/cartao fica simulado por padrao. A base para Mercado Pago ja existe, mas requer `MERCADO_PAGO_ACCESS_TOKEN` real e validacao final de webhooks.
 - Geocodificacao usa Nominatim/OpenStreetMap no frontend.
 

@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { Bike, ClipboardList, Copy, CreditCard, Download, Edit3, ExternalLink, MessageCircle, Minus, Plus, Printer, Save, Search, Store, Trash2, Utensils, X } from "lucide-react";
-import { api, Category, Order, Product, resolveAssetUrl, Tenant } from "./api/client";
+import { api, Category, isSupabaseAuthEnabled, Order, Product, resolveAssetUrl, supabasePasswordLogin, Tenant } from "./api/client";
 import { TrackingMap } from "./components/TrackingMap";
 
 type CartItem = {
@@ -217,6 +217,7 @@ function AdminDashboard() {
   const [tenant, setTenant] = useState<Tenant | null>(null);
   const [tenantName, setTenantName] = useState("Burger Demo");
   const [tenantSlug, setTenantSlug] = useState("burger-demo");
+  const [adminEmail, setAdminEmail] = useState(localStorage.getItem("adminEmail") ?? "");
   const [adminPassword, setAdminPassword] = useState("admin123");
   const [newAdminPassword, setNewAdminPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(() =>
@@ -429,15 +430,36 @@ function AdminDashboard() {
   async function loginAdmin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      const auth = await api.adminLogin(tenantSlug, adminPassword);
-      applyTenantSettings(auth.tenant);
-      localStorage.setItem("tenantId", auth.tenant.id);
-      localStorage.setItem("adminSessionTenantId", auth.tenant.id);
-      localStorage.setItem("adminToken", auth.token);
+      let authenticatedTenant: Tenant;
+      let sessionTenantId: string;
+
+      if (isSupabaseAuthEnabled()) {
+        const email = adminEmail.trim();
+        if (!email) {
+          throw new Error("Informe o e-mail do administrador.");
+        }
+        const found = await api.getTenantBySlug(tenantSlug);
+        const token = await supabasePasswordLogin(email, adminPassword);
+        sessionTenantId = found.id;
+        localStorage.setItem("tenantId", found.id);
+        localStorage.setItem("adminSessionTenantId", found.id);
+        localStorage.setItem("adminToken", token);
+        localStorage.setItem("adminEmail", email);
+        authenticatedTenant = await api.getTenantSettings(found.id);
+      } else {
+        const auth = await api.adminLogin(tenantSlug, adminPassword);
+        authenticatedTenant = auth.tenant;
+        sessionTenantId = auth.tenant.id;
+        localStorage.setItem("tenantId", auth.tenant.id);
+        localStorage.setItem("adminSessionTenantId", auth.tenant.id);
+        localStorage.setItem("adminToken", auth.token);
+      }
+
+      applyTenantSettings(authenticatedTenant);
       setIsAuthenticated(true);
       setNotice("Acesso liberado.");
       setError("");
-      await refreshData(auth.tenant.id);
+      await refreshData(sessionTenantId);
     } catch (error) {
       showError(error);
     }
@@ -858,6 +880,12 @@ function AdminDashboard() {
               Slug da loja
               <input value={tenantSlug} onChange={(event) => setTenantSlug(event.target.value)} />
             </label>
+            {isSupabaseAuthEnabled() && (
+              <label>
+                E-mail
+                <input type="email" value={adminEmail} onChange={(event) => setAdminEmail(event.target.value)} />
+              </label>
+            )}
             <label>
               Senha
               <input

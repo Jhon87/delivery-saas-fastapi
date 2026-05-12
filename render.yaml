@@ -17,6 +17,8 @@ services:
         value: https://sua-api.onrender.com
       - key: LOCAL_UPLOAD_DIR
         value: uploads
+      - key: ALLOW_PUBLIC_TENANT_CREATION
+        value: "false"
       - key: ADMIN_TOKEN_SECRET
         sync: false
       - key: ADMIN_AUTH_MODE
@@ -30,7 +32,7 @@ services:
       - key: JWT_TENANT_CLAIM
         value: app_metadata.tenant_id
       - key: PAYMENT_PROVIDER
-        value: mercado_pago
+        value: simulated
       - key: MERCADO_PAGO_ACCESS_TOKEN
         sync: false
       - key: SUPABASE_URL
